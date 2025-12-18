@@ -3,12 +3,14 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-export const firebaseConfig = {
-    apiKey: "DEIN_API_KEY",
-    authDomain: "DEIN_PROJEKT.firebaseapp.com",
-    projectId: "DEIN_PROJEKT",
-    storageBucket: "DEIN_PROJEKT.appspot.com",
-    appId: "DEINE_APP_ID"
+const firebaseConfig = {
+  apiKey: "AIzaSyCIiCloSpQgL_sBHbDTAz0NXt8TqyoN17I",
+  authDomain: "cloudfm-2a65a.firebaseapp.com",
+  projectId: "cloudfm-2a65a",
+  storageBucket: "cloudfm-2a65a.firebasestorage.app",
+  messagingSenderId: "249887318112",
+  appId: "1:249887318112:web:2c3a1167392c4be784a305",
+  measurementId: "G-ESE8B52TCE"
 };
 
 export const app = initializeApp(firebaseConfig);
