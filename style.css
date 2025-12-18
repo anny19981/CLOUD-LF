@@ -1,13 +1,17 @@
 body {
-    font-family: Arial;
     background: #121212;
     color: white;
+    font-family: Arial;
     padding: 20px;
 }
 
-button {
+input, button {
     padding: 8px;
-    margin-top: 5px;
+    margin: 4px;
+    border-radius: 5px;
+}
+
+button {
     background: #1db954;
     border: none;
     cursor: pointer;
