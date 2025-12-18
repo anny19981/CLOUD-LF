@@ -1,30 +1,41 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>CLOUD ÖÖLF</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Mini Spotify</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🎵 ÖÖLF FM</h1>
+<div id="auth">
+    <input id="emailInput" placeholder="E-Mail">
+    <input id="passwordInput" type="password" placeholder="Passwort">
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Registrieren</button>
+</div>
 
-<input type="file" id="songFile" accept="audio/*">
-<input type="text" id="songTitle" placeholder="Songtitel">
-<button onclick="uploadSong()">Song hochladen</button>
+<div id="appSection" style="display:none">
+    <h1>🎵 Mini Spotify</h1>
 
-<hr>
+    <input type="file" id="songFile" accept="audio/*">
+    <input id="songTitle" placeholder="Songtitel">
+    <button onclick="uploadSong()">Upload</button>
 
-<h2>Songs</h2>
-<ul id="songList"></ul>
+    <h2>Songs</h2>
+    <ul id="songList"></ul>
 
-<audio id="audioPlayer" controls></audio>
+    <h2>Playlist erstellen</h2>
+    <input id="playlistName" placeholder="Playlist Name">
+    <button onclick="createPlaylist()">Erstellen</button>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"></script>
+    <h2>Playlists</h2>
+    <ul id="playlistList"></ul>
 
-<script src="app.js"></script>
+    <audio id="player" controls></audio>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
