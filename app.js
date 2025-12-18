@@ -1,63 +1,54 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db, storage, auth } from "./firebase.js";
+import {
+    collection, addDoc, getDocs, doc, updateDoc, arrayUnion
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+    ref, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-// 🔥 Firebase Config
-const firebaseConfig = {
-    apiKey: "DEIN_API_KEY",
-    authDomain: "DEIN_PROJEKT.firebaseapp.com",
-    projectId: "DEIN_PROJEKT",
-    storageBucket: "DEIN_PROJEKT.appspot.com",
-    messagingSenderId: "XXXX",
-    appId: "XXXX"
+const player = document.getElementById("player");
+
+window.uploadSong = async () => {
+    const file = songFile.files[0];
+    const title = songTitle.value;
+
+    const refSong = ref(storage, `songs/${file.name}`);
+    await uploadBytes(refSong, file);
+    const url = await getDownloadURL(refSong);
+
+    await addDoc(collection(db, "songs"), { title, url });
+    loadSongs();
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const auth = getAuth(app);
-
-signInAnonymously(auth);
-
-// 🎵 Song hochladen
-async function uploadSong() {
-    const file = document.getElementById("songFile").files[0];
-    const title = document.getElementById("songTitle").value;
-
-    if (!file || !title) return alert("Song & Titel fehlen!");
-
-    const storageRef = ref(storage, `songs/${file.name}`);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-
-    await addDoc(collection(db, "songs"), {
-        title,
-        url
-    });
-
-    loadSongs();
-}
-
-// 🎧 Songs laden
 async function loadSongs() {
-    const list = document.getElementById("songList");
-    list.innerHTML = "";
-
-    const querySnapshot = await getDocs(collection(db, "songs"));
-    querySnapshot.forEach(doc => {
+    songList.innerHTML = "";
+    const snap = await getDocs(collection(db, "songs"));
+    snap.forEach(d => {
         const li = document.createElement("li");
-        li.textContent = doc.data().title;
-        li.onclick = () => playSong(doc.data().url);
-        list.appendChild(li);
+        li.textContent = d.data().title;
+        li.onclick = () => player.src = d.data().url;
+        songList.appendChild(li);
     });
 }
 
-function playSong(url) {
-    const player = document.getElementById("audioPlayer");
-    player.src = url;
-    player.play();
+window.createPlaylist = async () => {
+    await addDoc(collection(db, "playlists"), {
+        name: playlistName.value,
+        user: auth.currentUser.uid,
+        songs: []
+    });
+    loadPlaylists();
+};
+
+async function loadPlaylists() {
+    playlistList.innerHTML = "";
+    const snap = await getDocs(collection(db, "playlists"));
+    snap.forEach(d => {
+        const li = document.createElement("li");
+        li.textContent = d.data().name;
+        playlistList.appendChild(li);
+    });
 }
 
 loadSongs();
-window.uploadSong = uploadSong;
+loadPlaylists();
